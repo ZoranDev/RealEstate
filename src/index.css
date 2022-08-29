@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  font-family: monospace;
+}
+
+/* Ne znam da li btn treba u slucaju da je neka fja kad se klikne da trazi tu klasu btn */
+.btn {
+  /* background-color: transparent;
+  color: rgb(25, 30, 48);
+  width: 250px;
+  height: 50px;
+  padding: 10px 20px;
+  border: 2px solid rgb(25, 30, 48);
+  border-radius: 5px;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer; */
+}
+
+.btn:hover {
+  background-color: rgb(25, 30, 48);
+  color: white;
+  border: 2px solid rgb(25, 30, 48);
+}
+
+.btn:active {
+  transform: scale(0.95);
+}
+
+/* Ovaj dio cu ostaviti, otislo bi puno vremena da ispravljam to u tailwind */
+
+.slide-container {
+  width: 100%;
+  margin: 10px auto;
+  padding-bottom: 15px;
+  position: relative;
+  opacity: 0.7;
+  transition: opacity 0.5s;
+}
+
+.slide-container:hover {
+  opacity: 1;
+}
+
+.slider-track {
+  width: 100%;
+  height: 10px;
+  background-color: rgb(64, 60, 60);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  border-radius: 5px;
+}
+
+.slide-container input[type="range"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: transparent;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  pointer-events: none; /* Ovo je nesto bitno bas */
+}
+
+.slide-container input[type="range"]::-webkit-slider-runnable-track {
+  -webkit-appearance: none;
+}
+
+.slide-container input[type="range"]::-moz-range-track {
+  -webkit-appearance: none;
+}
+
+.slide-container input[type="range"]::-ms-track {
+  appearance: none;
+}
+
+.slide-container input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  background-color: #04aa6d;
+  cursor: pointer;
+  pointer-events: auto;
+}
