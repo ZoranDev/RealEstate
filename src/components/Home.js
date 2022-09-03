@@ -61,25 +61,30 @@ const Home = () => {
 
         {/* Rating, num of customers, num of properties */}
         <section className="flex justify-between items-start w-5/6 mb-5 sm:w-4/12">
-          <div className="flex flex-col justify-center items-center w-2/6">
-            <h1 className="flex text-4xl text-blue-700">
-              {parseFloat(rating.sumOfRatings / rating.totalRatings).toFixed(0)}
-              <FaStar className="w-5 ml-2.5" />
-            </h1>
-            <p className="text-base text-neutral-700 text-center">Rating</p>
-          </div>
-          <div className="flex flex-col justify-center items-center w-2/6">
-            <h1 className="text-4xl text-blue-700">{users.length - 1} +</h1>
-            <p className="text-base text-neutral-700 text-center">
-              Happy Customers
-            </p>
-          </div>
-          <div className="flex flex-col justify-center items-center w-2/6">
-            <h1 className="text-4xl text-blue-700">{allAdds.length} +</h1>
-            <p className="text-base text-neutral-700 text-center">
-              Property Ready
-            </p>
-          </div>
+          {["Rating", "Happy Customers", "Property Ready"].map(
+            (item, index) => (
+              <div
+                key={index}
+                className="flex flex-col justify-center items-center w-2/6"
+              >
+                <h1 className="flex text-4xl text-blue-700">
+                  {item === "Rating" ? (
+                    <>
+                      {parseFloat(
+                        rating.sumOfRatings / rating.totalRatings
+                      ).toFixed(0)}
+                      <FaStar className="w-5 ml-2.5" />{" "}
+                    </>
+                  ) : item === "Happy Customers" ? (
+                    <>{users.length - 1} +</>
+                  ) : (
+                    <>{allAdds.length} +</>
+                  )}
+                </h1>
+                <p className="text-base text-neutral-700 text-center">{item}</p>
+              </div>
+            )
+          )}
         </section>
       </section>
     </>
