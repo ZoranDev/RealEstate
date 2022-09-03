@@ -95,13 +95,14 @@ const Offers = () => {
     sortFromContext(e);
   };
 
-  //changeDisplayOfAdds
-  const changeDisplayOfAdds = (howToDisplay) => {
-    if (howToDisplay === "display-list") {
-      setHowToDisplay("list");
-    } else if (howToDisplay === "display-table") {
-      setHowToDisplay("table");
-    }
+  // displayAddsAsTable
+  const displayAddsAsTable = () => {
+    setHowToDisplay("table");
+  };
+
+  //displayAddsAsList
+  const displayAddsAsList = () => {
+    setHowToDisplay("list");
   };
 
   //fillQuickFilter
@@ -178,36 +179,26 @@ const Offers = () => {
           <div className="w-4/5 p-2 mb-4 border border-neutral-800 rounded-xl property-status">
             <h1 className="text-base mb-3">Property status</h1>
             <div className="property-status-options">
-              <div className="mb-2 flex justify-left items-center">
-                <input
-                  type="radio"
-                  value="Rent"
-                  id="Rent"
-                  name="radio-status"
-                  onChange={(e) => fillQuickFilter(e)}
-                />
-                <label
-                  htmlFor="Rent"
-                  className="text-base ml-2 text-neutral-800"
+              {["Rent", "Sell"].map((item, index) => (
+                <div
+                  className="mb-2 flex justify-left items-center"
+                  key={index}
                 >
-                  Rent
-                </label>
-              </div>
-              <div className="mb-2 flex justify-left items-center">
-                <input
-                  type="radio"
-                  value="Sell"
-                  id="Sell"
-                  name="radio-status"
-                  onChange={(e) => fillQuickFilter(e)}
-                />
-                <label
-                  htmlFor="Sell"
-                  className="text-base ml-2 text-neutral-800"
-                >
-                  Sell
-                </label>
-              </div>
+                  <input
+                    type="radio"
+                    value={item}
+                    id={item}
+                    name="radio-status"
+                    onChange={(e) => fillQuickFilter(e)}
+                  />
+                  <label
+                    htmlFor={item}
+                    className="text-base ml-2 text-neutral-800"
+                  >
+                    {item}
+                  </label>
+                </div>
+              ))}
             </div>
           </div>
 
@@ -215,66 +206,28 @@ const Offers = () => {
           <div className="w-4/5 p-2 mb-4 border border-neutral-800 rounded-xl property-category">
             <h1 className="text-base mb-3">Property category</h1>
             <div className="property-category-options">
-              <div className="mb-2 flex justify-left items-center">
-                <input
-                  type="radio"
-                  value="House"
-                  id="House"
-                  name="radio-category"
-                  onChange={(e) => fillQuickFilter(e)}
-                />
-                <label
-                  htmlFor="House"
-                  className="text-base ml-2 text-neutral-800"
-                >
-                  House
-                </label>
-              </div>
-              <div className="mb-2 flex justify-left items-center">
-                <input
-                  type="radio"
-                  value="Condo"
-                  id="Condo"
-                  name="radio-category"
-                  onChange={(e) => fillQuickFilter(e)}
-                />
-                <label
-                  htmlFor="Condo"
-                  className="text-base ml-2 text-neutral-800"
-                >
-                  Condo
-                </label>
-              </div>
-              <div className="mb-2 flex justify-left items-center">
-                <input
-                  type="radio"
-                  value="Land"
-                  id="Land"
-                  name="radio-category"
-                  onChange={(e) => fillQuickFilter(e)}
-                />
-                <label
-                  htmlFor="Land"
-                  className="text-base ml-2 text-neutral-800"
-                >
-                  Land
-                </label>
-              </div>
-              <div className="mb-2 flex justify-left items-center">
-                <input
-                  type="radio"
-                  value="BusinessSpace"
-                  id="BusinessSpace"
-                  name="radio-category"
-                  onChange={(e) => fillQuickFilter(e)}
-                />
-                <label
-                  htmlFor="BusinessSpace"
-                  className="text-base ml-2 text-neutral-800"
-                >
-                  Business Space
-                </label>
-              </div>
+              {["House", "Condo", "Land", "BusinessSpace"].map(
+                (item, index) => (
+                  <div
+                    key={index}
+                    className="mb-2 flex justify-left items-center"
+                  >
+                    <input
+                      type="radio"
+                      value={item}
+                      id={item}
+                      name="radio-category"
+                      onChange={(e) => fillQuickFilter(e)}
+                    />
+                    <label
+                      htmlFor={item}
+                      className="text-base ml-2 text-neutral-800"
+                    >
+                      {item === "BusinessSpace" ? "Business Space" : item}
+                    </label>
+                  </div>
+                )
+              )}
             </div>
           </div>
 
@@ -360,12 +313,12 @@ const Offers = () => {
               <FaList
                 className="mr-2 cursor-pointer hover:text-green-500"
                 id="display-list"
-                onClick={() => changeDisplayOfAdds("display-list")}
+                onClick={displayAddsAsList}
               />
               <FaTh
                 className="cursor-pointer hover:text-green-500"
                 id="display-table"
-                onClick={() => changeDisplayOfAdds("display-table")}
+                onClick={displayAddsAsTable}
               />
             </div>
           </div>
