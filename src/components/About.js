@@ -136,7 +136,7 @@ const About = () => {
                   key={star.name}
                   id={star.name}
                   className={star.class}
-                  onMouseEnter={(e) => rateUsFunction(e)}
+                  onMouseEnter={rateUsFunction}
                   onClick={() => submitRating(star.name)}
                 />
               );
