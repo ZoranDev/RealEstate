@@ -9,20 +9,20 @@ const UploadedImage = ({ url, deleteImage, showImage }) => {
   const [showHover, setShowHover] = useState(false);
 
   //handleOnMouseMove
-  const handleOnMouseMove = (e) => {
+  const handleOnMouseMove = () => {
     setShowHover(true);
   };
 
   //handleOnMouseMOut
-  const handleOnMouseOut = (e) => {
+  const handleOnMouseOut = () => {
     setShowHover(false);
   };
 
   return (
     <div
       className="w-28 h-20 m-1.5 p-2.5 border border-neutral-800 rounded-lg overflow-hidden relative flex justify-center items-center"
-      onMouseMove={(e) => handleOnMouseMove(e)}
-      onMouseOut={(e) => handleOnMouseOut(e)}
+      onMouseMove={handleOnMouseMove}
+      onMouseOut={handleOnMouseOut}
     >
       {showHover && (
         <div className="w-full h-full bg-black/70 absolute top-0 left-0 text-white  flex justify-center items-center flex-col">
