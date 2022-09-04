@@ -13,17 +13,22 @@ const Footer = () => {
   // Show footer state
   const [showFooter, setSHowFooter] = useState(false);
 
+  //showHideFooter
+  const showHideFooter = () => {
+    setSHowFooter(!showFooter);
+  };
+
   return (
     <footer className="w-full bg-cyan-700 text-white absolute bottom-0 left-0 z-10">
       {!showFooter ? (
         <FaChevronCircleUp
           className="text-cyan-700 w-8 h-8 absolute -top-8 left-2/4 -translate-x-2/4 cursor-pointer hover:text-cyan-500"
-          onClick={() => setSHowFooter(!showFooter)}
+          onClick={showHideFooter}
         />
       ) : (
         <FaChevronCircleDown
           className="text-cyan-700 w-8 h-8 absolute -top-8 left-2/4 -translate-x-2/4 cursor-pointer hover:text-cyan-500"
-          onClick={() => setSHowFooter(!showFooter)}
+          onClick={showHideFooter}
         />
       )}
 
