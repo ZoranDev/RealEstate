@@ -1,5 +1,5 @@
 // Main stuff
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import RealEstateContext from "../context/RealEstateContext";
 import { useNavigate } from "react-router-dom";
 
@@ -17,20 +17,31 @@ const SmallestDetailAdd = ({ info, openedInProfile }) => {
 
   const navigate = useNavigate();
 
-  // Find user name from all adds
-  let userName;
-  let userImage;
+  // state for useName and userImage
+  const [userName, setUserName] = useState(null);
+  const [userImage, setUserImage] = useState(null);
 
-  users.forEach((user) => {
-    if (user.adds) {
-      user.adds.forEach((add) => {
-        if (add.addID === info.addID) {
-          userName = user.name;
-          userImage = user.userImageUrl;
-        }
-      });
-    }
-  });
+  useEffect(() => {
+    getUserNameAndImage();
+  }, []);
+
+  // get user name and user imae
+  const getUserNameAndImage = () => {
+    users.forEach((user) => {
+      user.adds &&
+        user.adds.forEach((add) => {
+          if (add.addID === info.addID) {
+            setUserName(user.name);
+            setUserImage(user.userImageUrl);
+          }
+        });
+    });
+  };
+
+  //showDetails
+  const showDetails = () => {
+    navigate(`/offers/offer/${info.addID}`);
+  };
 
   return (
     <div
@@ -90,7 +101,7 @@ const SmallestDetailAdd = ({ info, openedInProfile }) => {
           <div
             className="btn w-36 flex justify-center items-center bg-transparent  text-neutral-800 py-2.5 px-7  border border-neutral-800 rounded text-base cursor-pointer
             hover:bg-neutral-800 hover:text-white hover:duration-200 active:scale-95 "
-            onClick={() => navigate(`/offers/offer/${info.addID}`)}
+            onClick={showDetails}
           >
             Details
             <FaAngleRight className="ml-2" />
