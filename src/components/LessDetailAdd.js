@@ -1,5 +1,5 @@
 // Main stuff
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import RealEstateContext from "../context/RealEstateContext";
 import { useNavigate } from "react-router-dom";
 import UserImage from "../Images/UserImage.png";
@@ -13,36 +13,57 @@ const LessDetailAdd = ({ info }) => {
   const { users, addToFavorite, activeUserInfo } =
     useContext(RealEstateContext);
 
-  // Find user name and image (if exist) from all adds
-  let userName;
-  let userImage;
+  // state for userName and userImage
+  const [userName, setUserName] = useState(null);
+  const [userImage, setUserImage] = useState(null);
 
-  users.forEach((user) => {
-    if (user.adds) {
-      user.adds.forEach((add) => {
-        if (add.addID === info.addID) {
-          userName = user.name;
-          userImage = user.userImageUrl;
-        }
-      });
-    }
-  });
+  //state for isFav add
+  /* const [isFav, setIsFav] = useState(false); */
 
-  // Check to see if displayed add is fav for active user
-  let isfav = false;
+  useEffect(() => {
+    getUserNameAndImage();
+  }, []);
 
-  // Check to see if user logged in
-  if (activeUserInfo) {
-    // Check to see if add is favorite for active user, if it is make it green otherwise make it default
-    if (activeUserInfo.favorites.length !== 0) {
-      if (activeUserInfo.favorites.includes(info.addID)) {
-        isfav = true;
+  /* useEffect(() => {
+    checkIsFav();
+  }, [users]); */ // ne radi dobro za remove from this list
+
+  //getUserNameAndImage function
+  const getUserNameAndImage = () => {
+    users.forEach((user) => {
+      if (user.adds) {
+        user.adds.forEach((add) => {
+          if (add.addID === info.addID) {
+            setUserName(user.name);
+            setUserImage(user.userImageUrl);
+          }
+        });
       }
+    });
+  };
+
+  //check is fav function
+  /* const checkIsFav = () => { */
+  // Check to see if user logged in
+  // Check to see if add is favorite for active user, if it is make it green otherwise make it default
+  /*     if (activeUserInfo && activeUserInfo.favorites.length !== 0) {
+      activeUserInfo.favorites.includes(info.addID) && setIsFav(true);
     }
-  }
+  }; */
 
   // This is used for onClick function below
   const navigate = useNavigate();
+
+  //clickOnHeart
+  const clickOnHeart = () => {
+    addToFavorite(info.addID);
+  };
+
+  let isFav = false;
+
+  if (activeUserInfo && activeUserInfo.favorites.length !== 0) {
+    isFav = activeUserInfo.favorites.includes(info.addID) && true;
+  }
 
   return (
     <div
@@ -57,11 +78,11 @@ const LessDetailAdd = ({ info }) => {
         </div>
         <FaHeart
           className={
-            isfav
+            isFav
               ? "w-8 h-8 cursor-pointer absolute top-2 right-2 z-10 text-green-500"
               : "w-8 h-8 cursor-pointer absolute top-2 right-2 z-10 text-white hover:text-green-500 duration-300"
           }
-          onClick={(e) => addToFavorite(e, info.addID)}
+          onClick={clickOnHeart}
         />
 
         <img

@@ -243,8 +243,9 @@ export const RealEstateProvider = ({ children }) => {
     }
   };
 
-  // addToFavorite  - maybe path svg problem because of react icon?!
-  const addToFavorite = (e, favoriteId) => {
+  // addToFavorite
+  const addToFavorite = (favoriteId) => {
+    // If someone is logged in, otherwise this can't be clicked
     if (activeUserInfo) {
       // Check to see if selected add is alredy in favorite, if yes remove it if no add it to favorite
       setUsers(
@@ -254,13 +255,11 @@ export const RealEstateProvider = ({ children }) => {
             if (!user.favorites.includes(favoriteId)) {
               user.favorites.push(favoriteId);
               setSuccessDivFunction("Added to your favorite list.");
-              e.target.parentElement.id = "fav-icon";
             } else {
               user.favorites = user.favorites.filter((favoriteAddId) => {
                 return favoriteAddId !== favoriteId;
               });
               setSuccessDivFunction("Removed from your favorite list.");
-              e.target.parentElement.id = "favorite-icon";
             }
             return user;
           } else {
