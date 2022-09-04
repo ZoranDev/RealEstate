@@ -41,13 +41,14 @@ const LogInForm = () => {
     phone: "",
   });
 
-  // showLogOrReg
-  const showLogOrReg = (type) => {
-    if (type === "log-in") {
-      setLogInType("log-in");
-    } else {
-      setLogInType("register");
-    }
+  //showLogInForm
+  const showLogInForm = () => {
+    setLogInType("log-in");
+  };
+
+  //showRegisterForm
+  const showRegisterForm = () => {
+    setLogInType("register");
   };
 
   // handleShowPassword
@@ -57,21 +58,16 @@ const LogInForm = () => {
 
   // handleUserInputs
   const handleUserInputs = (e) => {
-    if (e.target.id === "email") {
-      setUserInputs({ ...userInputs, email: e.target.value });
-    } else if (e.target.id === "password") {
-      setUserInputs({ ...userInputs, password: e.target.value });
-    } else if (e.target.id === "register-name") {
-      setUserInputs({ ...userInputs, name: e.target.value });
-    } else if (e.target.id === "register-lastName") {
-      setUserInputs({ ...userInputs, lastName: e.target.value });
-    } else if (e.target.id === "register-phone") {
-      setUserInputs({ ...userInputs, phone: e.target.value });
-    } else if (e.target.id === "register-email") {
-      setUserInputs({ ...userInputs, email: e.target.value });
-    } else if (e.target.id === "register-password") {
-      setUserInputs({ ...userInputs, password: e.target.value });
-    }
+    let id = e.target.id;
+    let value = e.target.value;
+
+    setUserInputs({
+      email: id === "email" ? value : userInputs.email,
+      password: id === "password" ? value : userInputs.password,
+      name: id === "register-name" ? value : userInputs.name,
+      lastName: id === "register-lastName" ? value : userInputs.lastName,
+      phone: id === "register-phone" ? value : userInputs.phone,
+    });
   };
 
   // formSubmit
@@ -122,7 +118,7 @@ const LogInForm = () => {
               ? "border-b-2 border-neutral-800 cursor-pointer"
               : "cursor-pointer"
           }
-          onClick={() => showLogOrReg("log-in")}
+          onClick={showLogInForm}
         >
           Log In
         </h1>
@@ -132,7 +128,7 @@ const LogInForm = () => {
               ? "border-b-2 border-neutral-800 cursor-pointer"
               : "cursor-pointer"
           }
-          onClick={() => showLogOrReg("register")}
+          onClick={showRegisterForm}
         >
           Register
         </h1>
@@ -143,7 +139,7 @@ const LogInForm = () => {
         <div className="flex bg-neutral-100 w-full h-10 mb-5 p-2.5 rounded-md">
           <FaRegEnvelope className="text-neutral-500 h-full w-5 mr-2.5 " />
           <input
-            onChange={(e) => handleUserInputs(e)}
+            onChange={handleUserInputs}
             id="email"
             className="bg-transparent text-neutral-800 border-0 outline-0 h-full w-4/5 text-base"
             type="email"
@@ -155,18 +151,18 @@ const LogInForm = () => {
         <div className="flex bg-neutral-100 w-full h-10 mb-5 p-2.5 rounded-md">
           {showPassword ? (
             <FaEye
-              onClick={() => handleShowPassword()}
-              className="text-neutral-500 h-full w-5 mr-2.5 cursoir-pointer"
+              onClick={handleShowPassword}
+              className="text-neutral-500 h-full w-5 mr-2.5 cursor-pointer"
             />
           ) : (
             <FaEyeSlash
-              onClick={() => handleShowPassword()}
-              className="text-neutral-500 h-full w-5 mr-2.5 cursoir-pointer"
+              onClick={handleShowPassword}
+              className="text-neutral-500 h-full w-5 mr-2.5 cursor-pointer"
             />
           )}
 
           <input
-            onChange={(e) => handleUserInputs(e)}
+            onChange={handleUserInputs}
             id="password"
             className="bg-transparent text-neutral-800 border-0 outline-0 h-full w-4/5 text-base"
             type={showPassword ? "text" : "password"}
@@ -181,7 +177,7 @@ const LogInForm = () => {
             <div className="flex bg-neutral-100 w-full h-10 mb-5 p-2.5 rounded-md">
               <FaUser className="text-neutral-500 h-full w-5 mr-2.5 " />
               <input
-                onChange={(e) => handleUserInputs(e)}
+                onChange={handleUserInputs}
                 id="register-name"
                 className="bg-transparent text-neutral-800 border-0 outline-0 h-full w-4/5 text-base"
                 type="text"
@@ -193,7 +189,7 @@ const LogInForm = () => {
             <div className="flex bg-neutral-100 w-full h-10 mb-5 p-2.5 rounded-md">
               <FaUser className="text-neutral-500 h-full w-5 mr-2.5 " />
               <input
-                onChange={(e) => handleUserInputs(e)}
+                onChange={handleUserInputs}
                 id="register-lastName"
                 className="bg-transparent text-neutral-800 border-0 outline-0 h-full w-4/5 text-base"
                 type="text"
@@ -205,7 +201,7 @@ const LogInForm = () => {
             <div className="flex bg-neutral-100 w-full h-10 mb-5 p-2.5 rounded-md">
               <FaPhoneAlt className="text-neutral-500 h-full w-5 mr-2.5" />
               <input
-                onChange={(e) => handleUserInputs(e)}
+                onChange={handleUserInputs}
                 id="register-phone"
                 className="bg-transparent text-neutral-800 border-0 outline-0 h-full w-4/5 text-base"
                 type="text"
