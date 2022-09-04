@@ -1,5 +1,5 @@
 // main stuff
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import RealEstateContext from "../context/RealEstateContext";
 
 // icons
@@ -30,9 +30,6 @@ const Offers = () => {
     range2: 500000,
   });
 
-  // State for display property - based on sort on the right side
-  const [howToDisplay, setHowToDisplay] = useState("list");
-
   // State for quick filter from the left side
   const [quickFilterInfo, setQuickFilterInfo] = useState({
     propertyStatus: null,
@@ -41,6 +38,9 @@ const Offers = () => {
     priceMax: 500000,
   });
 
+  // State for display property - based on sort on the right side
+  const [howToDisplay, setHowToDisplay] = useState("list");
+
   // State for showSideBarFilter
   const [showSideBarFilter, setShowSideBarFilter] = useState({
     active: false,
@@ -48,47 +48,44 @@ const Offers = () => {
       "hidden lg:w-1/5 lg:h-full lg:border-r-2 lg:border-dashed lg:border-neutral-800 lg:flex lg:flex-col lg:justify-start lg:items-center",
   });
 
+  // When change range sliders then change and quickFilterInfo
+  useEffect(() => {
+    setQuickFilterInfo({
+      ...quickFilterInfo,
+      priceMin: rangeSliders.range1,
+      priceMax: rangeSliders.range2,
+    });
+    // eslint-disable-next-line
+  }, [rangeSliders.range1, rangeSliders.range2]);
+
+  const handle = (e) => {
+    let value = e.target.value;
+    // Set range sliders ranges based on slider (first 2 ifs) based on input (second 2 ifs)
+    if (e.target.id === "myRange1") {
+      let number =
+        rangeSliders.range2 - value <= 0 ? rangeSliders.range2 : value;
+      setRangeSliders({ ...rangeSliders, range1: number });
+      return;
+    }
+    if (e.target.id === "myRange2") {
+      let number =
+        value - rangeSliders.range1 <= 0 ? rangeSliders.range1 : value;
+      setRangeSliders({ ...rangeSliders, range2: number });
+      return;
+    }
+    if (e.target.id === "range1") {
+      setRangeSliders({ ...rangeSliders, range1: value });
+      return;
+    }
+    if (e.target.id === "range2") {
+      setRangeSliders({ ...rangeSliders, range2: value });
+      return;
+    }
+  };
+
   //numberOfAdds
   let numberOfAdds =
     displayedAdds.length !== 0 ? displayedAdds.length : allAdds.length;
-
-  //sliderOne
-  const sliderOne = (e) => {
-    if (
-      parseInt(e.target.parentElement.children[2].value) -
-        parseInt(e.target.value) <=
-      0
-    ) {
-      e.target.value = e.target.parentElement.children[2].value;
-    }
-    setRangeSliders({ ...rangeSliders, range1: e.target.value });
-    setQuickFilterInfo({ ...quickFilterInfo, priceMin: e.target.value });
-  };
-
-  // sliderTwo
-  const sliderTwo = (e) => {
-    if (
-      parseInt(e.target.value) -
-        parseInt(e.target.parentElement.children[1].value) <=
-      0
-    ) {
-      e.target.value = e.target.parentElement.children[1].value;
-    }
-    setRangeSliders({ ...rangeSliders, range2: e.target.value });
-    setQuickFilterInfo({ ...quickFilterInfo, priceMax: e.target.value });
-  };
-
-  //handleOnChange
-  const handleOnChange1 = (e) => {
-    setRangeSliders({ ...rangeSliders, range1: e.target.value });
-    setQuickFilterInfo({ ...quickFilterInfo, priceMin: e.target.value });
-  };
-
-  //handleOnChange
-  const handleOnChange2 = (e) => {
-    setRangeSliders({ ...rangeSliders, range2: e.target.value });
-    setQuickFilterInfo({ ...quickFilterInfo, priceMax: e.target.value });
-  };
 
   //sortResults
   const sortResults = (e) => {
@@ -105,28 +102,21 @@ const Offers = () => {
     setHowToDisplay("list");
   };
 
-  //fillQuickFilter
+  // fill QuickFilter
   const fillQuickFilter = (e) => {
-    if (e.target.id === "Rent" || e.target.id === "Sell") {
-      setQuickFilterInfo({
-        ...quickFilterInfo,
-        propertyStatus: e.target.value,
-      });
-    } else if (
-      e.target.id === "House" ||
-      e.target.id === "Condo" ||
-      e.target.id === "Land" ||
-      e.target.id === "BusinessSpace"
-    ) {
-      setQuickFilterInfo({
-        ...quickFilterInfo,
-        propertyCategory: e.target.value,
-      });
-    }
+    e.target.id === "Rent" || e.target.id === "Sell"
+      ? setQuickFilterInfo({
+          ...quickFilterInfo,
+          propertyStatus: e.target.value,
+        })
+      : setQuickFilterInfo({
+          ...quickFilterInfo,
+          propertyCategory: e.target.value,
+        });
   };
 
   // showSideBarFilterFunction
-  const showSideBarFilterFunction = (e) => {
+  const showSideBarFilterFunction = () => {
     setShowSideBarFilter({
       active: true,
       class:
@@ -135,7 +125,7 @@ const Offers = () => {
   };
 
   //closeSideBarFilter
-  const closeSideBarFilter = (e) => {
+  const closeSideBarFilter = () => {
     setShowSideBarFilter({
       active: false,
       class:
@@ -170,15 +160,25 @@ const Offers = () => {
           {/* Close button when filter is open as side bar */}
           <h1
             className="block absolute top-2 right-0.5 bg-red-800 w-5 h-5 flex justify-center items-center rounded-full opacity-70 hover:opacity-100 cursor-pointer lg:hidden"
-            onClick={(e) => closeSideBarFilter(e)}
+            onClick={closeSideBarFilter}
           >
             x
           </h1>
 
           {/* Property status */}
-          <div className="w-4/5 p-2 mb-4 border border-neutral-800 rounded-xl property-status">
-            <h1 className="text-base mb-3">Property status</h1>
-            <div className="property-status-options">
+          <div
+            className={`w-4/5 p-2 ${
+              showSideBarFilter && "bg-white"
+            } mb-4 border border-neutral-800 rounded-xl property-status`}
+          >
+            <h1
+              className={`text-base mb-3 ${
+                showSideBarFilter && "text-neutral-800"
+              }`}
+            >
+              Property status
+            </h1>
+            <div>
               {["Rent", "Sell"].map((item, index) => (
                 <div
                   className="mb-2 flex justify-left items-center"
@@ -189,7 +189,7 @@ const Offers = () => {
                     value={item}
                     id={item}
                     name="radio-status"
-                    onChange={(e) => fillQuickFilter(e)}
+                    onChange={fillQuickFilter}
                   />
                   <label
                     htmlFor={item}
@@ -203,9 +203,19 @@ const Offers = () => {
           </div>
 
           {/* Property category */}
-          <div className="w-4/5 p-2 mb-4 border border-neutral-800 rounded-xl property-category">
-            <h1 className="text-base mb-3">Property category</h1>
-            <div className="property-category-options">
+          <div
+            className={`w-4/5 p-2 mb-4 ${
+              showSideBarFilter && "bg-white"
+            } border border-neutral-800 rounded-xl property-category`}
+          >
+            <h1
+              className={`text-base mb-3 ${
+                showSideBarFilter && "text-neutral-800"
+              }`}
+            >
+              Property category
+            </h1>
+            <div>
               {["House", "Condo", "Land", "BusinessSpace"].map(
                 (item, index) => (
                   <div
@@ -217,7 +227,7 @@ const Offers = () => {
                       value={item}
                       id={item}
                       name="radio-category"
-                      onChange={(e) => fillQuickFilter(e)}
+                      onChange={fillQuickFilter}
                     />
                     <label
                       htmlFor={item}
@@ -232,20 +242,38 @@ const Offers = () => {
           </div>
 
           {/* Property price */}
-          <div className="w-4/5 p-2 mb-4 border border-neutral-800 rounded-xl property-price">
-            <h1 className="text-base mb-3">Property price (€)</h1>
+          <div
+            className={`w-4/5 p-2 ${
+              showSideBarFilter && "bg-white"
+            } mb-4 border border-neutral-800 rounded-xl property-price`}
+          >
+            <h1
+              className={`text-base mb-3 ${
+                showSideBarFilter && "text-neutral-800"
+              }`}
+            >
+              Property price (€)
+            </h1>
             <div className="w-full flex items-center justify-between">
               <input
                 type="number"
                 value={rangeSliders.range1}
-                onChange={(e) => handleOnChange1(e)}
-                className="w-45 text-base p-1"
+                onChange={handle}
+                className={`w-45 text-base p-1 ${
+                  showSideBarFilter &&
+                  "border-2 border-neutral-400 text-neutral-800"
+                }`}
+                id="range1"
               />
               <input
                 type="number"
                 value={rangeSliders.range2}
-                onChange={(e) => handleOnChange2(e)}
-                className="w-45 text-base p-1"
+                onChange={handle}
+                className={`w-45 text-base p-1 ${
+                  showSideBarFilter &&
+                  "border-2 border-neutral-400 text-neutral-800"
+                }`}
+                id="range2"
               />
             </div>
             <div className="slide-container">
@@ -256,8 +284,8 @@ const Offers = () => {
                 max="500000"
                 value={rangeSliders.range1}
                 className="slider"
-                id="myRange"
-                onInput={(e) => sliderOne(e)}
+                id="myRange1"
+                onInput={handle}
               />
               <input
                 type="range"
@@ -265,14 +293,16 @@ const Offers = () => {
                 max="500000"
                 value={rangeSliders.range2}
                 className="slider"
-                id="myRange"
-                onInput={(e) => sliderTwo(e)}
+                id="myRange2"
+                onInput={handle}
               />
             </div>
           </div>
           <button
-            className="w-4/5 flex justify-center items-center bg-transparent  text-neutral-800 py-2.5 px-7  mt-1 border border-neutral-800 rounded text-base cursor-pointer
-            hover:bg-neutral-800 hover:text-white hover:duration-200 active:scale-95 "
+            className={`w-4/5 flex justify-center items-center ${
+              showSideBarFilter ? "bg-white" : "bg-transparent"
+            }  text-neutral-800 py-2.5 px-7  mt-1 border border-neutral-800 rounded text-base cursor-pointer
+            hover:bg-neutral-800 hover:text-white hover:duration-200 active:scale-95`}
             onClick={(e) => quickFilterFunction(e, quickFilterInfo)}
           >
             Confirm
@@ -284,7 +314,7 @@ const Offers = () => {
           <div className="w-full flex justify-start items-center">
             <FaFilter
               className="block w-5 h-5 text-green-500 cursor-pointer mr-2 opacity-70 hover:opacity-100 lg:hidden"
-              onClick={(e) => showSideBarFilterFunction(e)}
+              onClick={showSideBarFilterFunction}
             />
             <h1>All real estate found </h1>
           </div>
@@ -341,14 +371,14 @@ const Offers = () => {
                   })
               : howToDisplay === "list"
               ? users.map(
-                  (user, index) =>
+                  (user) =>
                     user.adds &&
                     user.adds.map((add, index) => {
                       return <LessDetailAdd info={add} key={index} />;
                     })
                 )
               : users.map(
-                  (user, index) =>
+                  (user) =>
                     user.adds &&
                     user.adds.map((add, index) => {
                       return <SmallestDetailAdd info={add} key={index} />;
