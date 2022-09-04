@@ -26,7 +26,7 @@ const Navbar = () => {
   };
 
   // closeUserPanel
-  const closeUserPanel = (e) => {
+  const closeUserPanel = () => {
     setShowUserPanel(false);
   };
 
@@ -39,12 +39,12 @@ const Navbar = () => {
   };
 
   // openSideNavbar
-  const openSideNavbarFunction = (e) => {
+  const openSideNavbarFunction = () => {
     setOpenSideNavbar(true);
   };
 
   //closeSideNavbarFunction
-  const closeSideNavbarFunction = (e) => {
+  const closeSideNavbarFunction = () => {
     setOpenSideNavbar(false);
   };
 
@@ -53,7 +53,7 @@ const Navbar = () => {
       <div className="flex justify-center items-center">
         <FaList
           className="block w-5 h-5 mr-2 cursor-pointer sm:hidden"
-          onClick={(e) => openSideNavbarFunction(e)}
+          onClick={openSideNavbarFunction}
         />
         <Link
           to="/"
@@ -78,36 +78,26 @@ const Navbar = () => {
               ? "w-5 h-5 flex items-center justify-center cursor-pointer absolute top-2 right-2 rounded-full bg-red-400 text-white hover:bg-red-500 sm:hidden"
               : "hidden "
           }
-          onClick={(e) => closeSideNavbarFunction(e)}
+          onClick={closeSideNavbarFunction}
         >
           X
         </h1>
 
-        <Link
-          to="/"
-          children={
-            <div className="text-white bg-transparent text-xl mb-8 hover:text-neutral-400 sm:mb-0 sm:mr-8 sm:text-neutral-800 sm:hover:text-neutral-800 sm:hover:border-b sm:hover:border-neutral-800">
-              Home
-            </div>
-          }
-        />
-        <Link
-          to="/offers"
-          children={
-            <div className="text-white bg-transparent text-xl mb-8 hover:text-neutral-400 sm:mb-0 sm:mr-8 sm:text-neutral-800 sm:hover:text-neutral-800 sm:hover:border-b sm:hover:border-neutral-800">
-              Offers
-            </div>
-          }
-        />
-        <Link
-          to="/About"
-          children={
-            <div className="text-white bg-transparent text-xl mb-8 hover:text-neutral-400 sm:mb-0 sm:mr-8 sm:text-neutral-800 sm:hover:text-neutral-800 sm:hover:border-b sm:hover:border-neutral-800">
-              AboutUs
-            </div>
-          }
-        />
+        {["Home", "Offers", "About"].map((item, index) => (
+          <Link
+            key={index}
+            to={
+              item === "Home" ? "/" : item === "Offers" ? "/offers" : "/About"
+            }
+            children={
+              <div className="text-white bg-transparent text-xl mb-8 hover:text-neutral-400 sm:mb-0 sm:mr-8 sm:text-neutral-800 sm:hover:text-neutral-800 sm:hover:border-b sm:hover:border-neutral-800">
+                {item}
+              </div>
+            }
+          />
+        ))}
       </div>
+
       {/* Log in btn if user is not logged, and other if it is logged */}
       {activeUserInfo ? (
         <div className="relative flex flex-col lg:flex-row">
@@ -115,7 +105,7 @@ const Navbar = () => {
           <div
             className="w-32 flex justify-center items-center bg-transparent text-neutral-800 py-2.5 px-7 ml-4 mt-1 border border-neutral-800 rounded text-base cursor-pointer
             hover:bg-neutral-800 hover:text-white hover:duration-200 active:scale-95 md:w-44"
-            onClick={(e) => openNewAddForm(e)}
+            onClick={openNewAddForm}
           >
             <FaPlusCircle className="w-4" />
             <h1 className="text-base ml-2.5 font-thin">ADD</h1>
@@ -125,7 +115,7 @@ const Navbar = () => {
           <div
             className="w-32 flex justify-center items-center bg-transparent  text-neutral-800 py-2.5 px-7 ml-4 mt-1 border border-neutral-800 rounded text-base cursor-pointer
             hover:bg-neutral-800 hover:text-white hover:duration-200 active:scale-95 md:w-44"
-            onClick={() => onClickUserName()}
+            onClick={onClickUserName}
           >
             <FaUserAlt className="w-4" />
             <h1 className="text-base ml-2.5 font-thin">
@@ -144,7 +134,7 @@ const Navbar = () => {
                     My Profile
                   </h1>
                 }
-                onClick={(e) => closeUserPanel(e)}
+                onClick={closeUserPanel}
               />
 
               <div
@@ -162,7 +152,7 @@ const Navbar = () => {
           className="w-40 flex justify-center items-center bg-transparent  text-neutral-800 py-2.5 px-7 ml-4 mt-1 border border-neutral-800 rounded text-base cursor-pointer
           hover:bg-neutral-800 hover:text-white hover:duration-200 active:scale-95 md:w-44"
           id="navbarlogin"
-          onClick={(e) => showLogIn(e)}
+          onClick={showLogIn}
         >
           <FaUserAlt className="w-4" />
           <h1 className="text-base ml-2.5 font-thin">Log In</h1>
