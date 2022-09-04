@@ -27,13 +27,19 @@ export const MyProfile = () => {
 
   //updateMyProfileInfo - on save changes btn we need to save that in context
   const updateMyProfileInfo = (e) => {
-    if (e.target.id === "my-profile-name") {
-      setMyProfileInfo({ ...myProfileInfo, name: e.target.value });
-    } else if (e.target.id === "my-profile-lastName") {
-      setMyProfileInfo({ ...myProfileInfo, lastName: e.target.value });
-    } else if (e.target.id === "my-profile-phone") {
-      setMyProfileInfo({ ...myProfileInfo, phone: e.target.value });
-    }
+    setMyProfileInfo({
+      ...myProfileInfo,
+      name:
+        e.target.id === "my-profile-name" ? e.target.value : myProfileInfo.name,
+      lastName:
+        e.target.id === "my-profile-lastName"
+          ? e.target.value
+          : myProfileInfo.lastName,
+      phone:
+        e.target.id === "my-profile-phone"
+          ? e.target.value
+          : myProfileInfo.phone,
+    });
   };
 
   // state for url image
@@ -51,11 +57,7 @@ export const MyProfile = () => {
 
   // handleClick
   const handleClick = (e) => {
-    if (e.target.id === "myAdds") {
-      setAddsToShow("myAdds");
-    } else {
-      setAddsToShow("favAdds");
-    }
+    setAddsToShow(e.target.id);
   };
 
   return (
@@ -115,41 +117,32 @@ export const MyProfile = () => {
                 />
               </div>
             </div>
-            {/* Name */}
-            <div className="w-full mb-4">
-              <h2 className="mb-2">Name</h2>
-              <input
-                type="text"
-                value={activeUserInfo ? myProfileInfo.name : ""}
-                id="my-profile-name"
-                onChange={(e) => updateMyProfileInfo(e)}
-                className="w-4/5 bg-white/50 text-neutral-800 px-5 py-1 border border-neutral-800 rounded  outline-0 text-base"
-              />
-            </div>
-
-            {/* Last name */}
-            <div className="w-full mb-4">
-              <h2 className="mb-2">Last name</h2>
-              <input
-                type="text"
-                value={activeUserInfo ? myProfileInfo.lastName : ""}
-                id="my-profile-lastName"
-                onChange={(e) => updateMyProfileInfo(e)}
-                className="w-4/5 bg-white/50 text-neutral-800 px-5 py-1 border border-neutral-800 rounded  outline-0 text-base"
-              />
-            </div>
-
-            {/* Phone */}
-            <div className="w-full mb-4">
-              <h2 className="mb-2">Phone</h2>
-              <input
-                type="text"
-                value={activeUserInfo ? myProfileInfo.phone : ""}
-                id="my-profile-phone"
-                onChange={(e) => updateMyProfileInfo(e)}
-                className="w-4/5 bg-white/50 text-neutral-800 px-5 py-1 border border-neutral-800 rounded  outline-0 text-base"
-              />
-            </div>
+            {["Name", "Last name", "Phone"].map((item, index) => (
+              <div className="w-full mb-4" key={index}>
+                <h2 className="mb-2">{item}</h2>
+                <input
+                  type="text"
+                  value={
+                    activeUserInfo
+                      ? item === "Name"
+                        ? myProfileInfo.name
+                        : item === "Last name"
+                        ? myProfileInfo.lastName
+                        : myProfileInfo.phone
+                      : ""
+                  }
+                  id={
+                    item === "Name"
+                      ? "my-profile-name"
+                      : item === "Last name"
+                      ? "my-profile-lastName"
+                      : "my-profile-phone"
+                  }
+                  onChange={updateMyProfileInfo}
+                  className="w-4/5 bg-white/50 text-neutral-800 px-5 py-1 border border-neutral-800 rounded  outline-0 text-base"
+                />
+              </div>
+            ))}
 
             <div
               className="w-32 md:w-44 text-center flex justify-center items-center bg-transparent mt-5 text-neutral-800 py-2.5 px-7 border border-neutral-800 rounded text-base cursor-pointer
@@ -172,7 +165,7 @@ export const MyProfile = () => {
                     : "w-full md:w-1/2 h-full bg-white p-2 text-neutral-800 text-xl text-center uppercase cursor-pointer"
                 }
                 id="myAdds"
-                onClick={(e) => handleClick(e)}
+                onClick={handleClick}
               >
                 My Adds
               </h1>
@@ -183,7 +176,7 @@ export const MyProfile = () => {
                     : "w-full md:w-1/2 h-full bg-white p-2 text-neutral-800 text-xl text-center uppercase cursor-pointer"
                 }
                 id="favAdds"
-                onClick={(e) => handleClick(e)}
+                onClick={handleClick}
               >
                 Favorite
               </h1>
