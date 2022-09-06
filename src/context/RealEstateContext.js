@@ -273,19 +273,12 @@ export const RealEstateProvider = ({ children }) => {
     setSuccessDivFunction("Info successfully updated!!");
   };
 
+  // Function for sorting based on clicked filter from left side in offers.js
   const quickFilterFunction = (e, quickFilterInfo) => {
     // Make initial array
-    let initArray = [];
-    users.forEach((user) => {
-      if (user.adds) {
-        user.adds.forEach((add) => {
-          initArray.push(add);
-        });
-      }
-    });
+    let initArray = allAdds;
 
-    // Make array to permut during filter\
-
+    // Make array to permut during filter
     let arrayToPermut = [];
 
     // If there is no adds
@@ -293,91 +286,35 @@ export const RealEstateProvider = ({ children }) => {
       setSuccessDivFunction("No adds found!");
     }
 
-    // Check to see if wee need to filter at all
-    if (
-      !quickFilterInfo.propertyCategory &&
-      !quickFilterInfo.propertyStatus &&
-      quickFilterInfo.priceMin === 1 &&
-      quickFilterInfo.priceMax === 500000
-    ) {
-      setDisplayedAdds(initArray);
-    } else {
-      // If something of default parameters changed
-      // First filter by price
+    // Always first permut by price
+    arrayToPermut = allAdds.filter((add) => {
+      return (
+        parseInt(add.price) >= parseInt(quickFilterInfo.priceMin) &&
+        parseInt(add.price) <= parseInt(quickFilterInfo.priceMax)
+      );
+    });
+
+    if (quickFilterInfo.propertyStatus) {
       arrayToPermut = allAdds.filter((add) => {
-        return (
-          parseInt(add.price) >= parseInt(quickFilterInfo.priceMin) &&
-          parseInt(add.price) <= parseInt(quickFilterInfo.priceMax)
-        );
+        return add.addType === quickFilterInfo.propertyStatus;
       });
-
-      // If there is no adds in that price range
-      if (arrayToPermut.length === 0) {
-        setSuccessDivFunction("No adds in that price range.");
-      } else {
-        if (quickFilterInfo.propertyStatus) {
-          // If we have property status then we check if we have property category,
-          // If only have propery status fiter that way other first filter by status then by category, same is next else if
-          if (quickFilterInfo.propertyCategory) {
-            arrayToPermut = allAdds.filter((add) => {
-              return add.addType === quickFilterInfo.propertyStatus;
-            });
-
-            arrayToPermut = arrayToPermut.filter((add) => {
-              return add.propertyType === quickFilterInfo.propertyCategory;
-            });
-
-            if (arrayToPermut.length === 0) {
-              setSuccessDivFunction("No add founded.");
-            } else {
-              setDisplayedAdds(arrayToPermut);
-            }
-          } else {
-            arrayToPermut = allAdds.filter((add) => {
-              return add.addType === quickFilterInfo.propertyStatus;
-            });
-
-            if (arrayToPermut.length === 0) {
-              setSuccessDivFunction("No add founded.");
-            } else {
-              setDisplayedAdds(arrayToPermut);
-            }
-          }
-        } else if (quickFilterInfo.propertyCategory) {
-          if (quickFilterInfo.propertyStatus) {
-            arrayToPermut = allAdds.filter((add) => {
-              return add.propertyType === quickFilterInfo.propertyCategory;
-            });
-
-            arrayToPermut = arrayToPermut.filter((add) => {
-              return add.addType === quickFilterInfo.propertyStatus;
-            });
-
-            if (arrayToPermut.length === 0) {
-              setSuccessDivFunction("No add founded.");
-            } else {
-              setDisplayedAdds(arrayToPermut);
-            }
-          } else {
-            arrayToPermut = allAdds.filter((add) => {
-              return add.propertyType === quickFilterInfo.propertyCategory;
-            });
-
-            if (arrayToPermut.length === 0) {
-              setSuccessDivFunction("No add founded.");
-            } else {
-              setDisplayedAdds(arrayToPermut);
-            }
-          }
-        } else {
-          // If ther is no filter by status or category only have filter by price
-          setDisplayedAdds(arrayToPermut);
-        }
-      }
     }
+
+    if (quickFilterInfo.propertyCategory) {
+      arrayToPermut = arrayToPermut.filter((add) => {
+        return add.propertyType === quickFilterInfo.propertyCategory;
+      });
+    }
+
+    if (arrayToPermut.length === 0) {
+      setSuccessDivFunction("No adds for that filters.");
+      return;
+    }
+
+    setDisplayedAdds(arrayToPermut);
   };
 
-  //submitRating
+  //submitRating- --------------------------------------------------
   const submitRating = (id) => {
     let clickedRating = parseInt(id);
 
