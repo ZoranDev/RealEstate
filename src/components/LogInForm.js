@@ -41,6 +41,17 @@ const LogInForm = () => {
     phone: "",
   });
 
+  //resetInputInfo
+  const resetInputInfo = () => {
+    setUserInputs({
+      email: "",
+      password: "",
+      name: "",
+      lastName: "",
+      phone: "",
+    });
+  };
+
   //showLogInForm
   const showLogInForm = () => {
     setLogInType("log-in");
@@ -84,31 +95,26 @@ const LogInForm = () => {
         } else {
           setError({
             active: true,
-            message: "User don't exist. Check info or register.",
+            message: "User don't found. Check info or register.",
           });
-          setUserInputs({ email: "", password: "" });
         }
       });
-    } else if (logInType === "register") {
+    } else {
       // Check to see if typed e-mail alredy exist in our users
-      let alredyThere = false;
-      users.forEach((user) => {
-        if (user.email === userInputs.email) {
-          alredyThere = true;
-        }
-      });
-      if (alredyThere) {
-        setError({ active: true, message: "Alredy exist." });
-      } else {
-        createNewUser(userInputs);
+      {
+        users.map((user) => user.email).includes(userInputs.email)
+          ? setError({ active: true, message: "Alredy exist." })
+          : createNewUser(userInputs);
       }
     }
+
+    resetInputInfo();
   };
 
   return (
     <form
       className="bg-white w-80 py-5 px-6 rounded-lg relative"
-      onSubmit={(e) => formSubmit(e)}
+      onSubmit={formSubmit}
     >
       {/* Nav section */}
       <nav className="flex justify-between text-neutral-800 w-full mb-5 py-1 text-base">
@@ -231,7 +237,7 @@ const LogInForm = () => {
       {/* Close section */}
       <div
         className="flex absolute -right-2.5 -top-5 text-xl text-white cursor-pointer"
-        onClick={(e) => showLogIn(e)}
+        onClick={showLogIn}
       >
         x
       </div>

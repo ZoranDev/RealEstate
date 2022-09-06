@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 // Importing images for start app - OVO MOZDA DRUGACIJE NEKAKO VIDJETI
@@ -22,6 +22,7 @@ export const RealEstateProvider = ({ children }) => {
       password: "admin",
       id: uuidv4(),
       favorites: [],
+      adds: [],
     },
     {
       name: "Zoran",
@@ -105,7 +106,7 @@ export const RealEstateProvider = ({ children }) => {
     sumOfRatings: 5, // sum for each response / total
   });
 
-  // Set success div function - ovo napraviti da ne moram svaki cas da kucam ove gluposti
+  // Set success div function - to display success div element with corresponding message
   const setSuccessDivFunction = (message) => {
     setSuccessDiv({
       active: true,
@@ -113,6 +114,11 @@ export const RealEstateProvider = ({ children }) => {
       class:
         "bg-green-500 text-white text-xl p-4 rounded-lg absolute top-5 right-8 block z-10 succesDivAnimation",
     });
+    hideSuccessDiv();
+  };
+
+  //hide success message - function
+  const hideSuccessDiv = () => {
     setTimeout(() => {
       setSuccessDiv({
         active: false,
@@ -125,21 +131,22 @@ export const RealEstateProvider = ({ children }) => {
   // setActiveUser
   const setActiveUser = (user) => {
     setActiveUserInfo(user);
-
     setSuccessDivFunction(`Welcome back, ${user.name}!`);
   };
 
   // createNewUser
   const createNewUser = (registerInputs) => {
-    // Create new user and it's id and favorites prop
+    // Create new user based on userInputs(mail,name,password,phone,lastname) and it's id and favorites prop
     const newUser = registerInputs;
     newUser.id = uuidv4();
     newUser.favorites = [];
+    newUser.adds = [];
+    // Set users state with that new user
     setUsers([...users, newUser]);
-    // Then set that user as active user -- MOZDA OVO PREKO ID URADITI
+    // Then set that user as active user
     setActiveUser(newUser);
     showLogIn();
-    // Message that user is creater
+    // Message that new user profile is created
     setSuccessDivFunction("New profile created successfully!");
   };
 
@@ -149,17 +156,17 @@ export const RealEstateProvider = ({ children }) => {
   };
 
   // show log in
-  const showLogIn = (e) => {
+  const showLogIn = () => {
     setShowLogInForm(!showLogInForm);
   };
 
   //openNewAddForm
-  const openNewAddForm = (e) => {
+  const openNewAddForm = () => {
     setShowNewAddForm(true);
   };
 
   //closeNewAddForm
-  const closeNewAddForm = (e) => {
+  const closeNewAddForm = () => {
     setShowNewAddForm(false);
   };
 
@@ -168,82 +175,57 @@ export const RealEstateProvider = ({ children }) => {
     newAdd.releaseTime = new Date().toString().slice(0, 15);
     newAdd.releaseTimeStamp = new Date().getTime();
     newAdd.addID = uuidv4();
-    // Now that newAdd has to be appended to adds array of active user
+    // Append that add to adds array of active user
     setUsers(
       users.map((user) => {
         if (user.id === activeUserInfo.id) {
-          if (user.adds) {
-            user.adds.push(newAdd);
-          } else {
-            let adds = [];
-            adds.push(newAdd);
-            user.adds = adds;
-          }
-          return user;
-        } else {
-          return user;
+          user.adds.push(newAdd);
         }
+        return user;
       })
     );
-    // close new add form
-    setShowNewAddForm(false);
-    // Display message to show that add was created
+    closeNewAddForm();
+    // Display message for successfully created add
     setSuccessDivFunction("Add created successfully!");
   };
 
-  // All adds
+  // All adds ---- Mozda pogledati jos malo moze li se uprostiti
   const [displayedAdds, setDisplayedAdds] = useState([]);
-  // MOZDA OVO DORADITI MALO
-  let allAdds = [];
-  users.forEach((user) => {
-    if (user.adds) {
-      user.adds.forEach((add) => {
-        allAdds.push(add);
-      });
-    }
-  });
+  const [allAdds, setAllAdds] = useState([]);
 
+  useEffect(() => {
+    let all = [];
+    users.forEach((user) => {
+      user.adds &&
+        user.adds.forEach((add) => {
+          all.push(add);
+        });
+    });
+    setAllAdds(all);
+  }, [displayedAdds]);
+
+  // SortFromContext function - form offers.js
   const sortFromContext = (e) => {
-    if (e.target.value === "Oldest-Newest") {
-      setDisplayedAdds(
-        allAdds.sort((a, b) => {
+    let sortType = e.target.value;
+    setDisplayedAdds(
+      allAdds.sort((a, b) => {
+        if (sortType === "Oldest-Newest") {
           return a.releaseTimeStamp - b.releaseTimeStamp;
-        })
-      );
-    } else if (e.target.value === "Newest-Oldest") {
-      setDisplayedAdds(
-        allAdds.sort((a, b) => {
-          return b.releaseTimeStamp - a.releaseTimeStamp;
-        })
-      );
-    }
-    if (e.target.value === "PriceMin-Max") {
-      setDisplayedAdds(
-        allAdds.sort((a, b) => {
-          return a.price - b.price;
-        })
-      );
-    } else if (e.target.value === "PriceMax-Min") {
-      setDisplayedAdds(
-        allAdds.sort((a, b) => {
-          return b.price - a.price;
-        })
-      );
-    } else if (e.target.value === "No-Sort") {
-      /* Sort original way */
-      let initArray = [];
-      users.forEach((user) => {
-        if (user.adds) {
-          user.adds.forEach((add) => {
-            initArray.push(add);
-          });
         }
-      });
-      setDisplayedAdds(initArray);
-    }
+        if (sortType === "Newest-Oldest") {
+          return b.releaseTimeStamp - a.releaseTimeStamp;
+        }
+        if (sortType === "PriceMin-Max") {
+          return a.price - b.price;
+        }
+        if (sortType === "PriceMax-Min") {
+          return b.price - a.price;
+        }
+      })
+    );
   };
 
-  // addToFavorite
+  // addToFavorite ---------------------------------------------------------------------------------------------------------------
   const addToFavorite = (favoriteId) => {
     // If someone is logged in, otherwise this can't be clicked
     if (activeUserInfo) {
@@ -272,7 +254,7 @@ export const RealEstateProvider = ({ children }) => {
     }
   };
 
-  // saveNewProfileInfo
+  // saveNewProfileInfo ----------------------------------------------------------------------------------------------------
   const saveNewProfileInfo = (e, newInfo, userImageUrl) => {
     // Now go through users and for that user change info
     setUsers(
@@ -407,7 +389,7 @@ export const RealEstateProvider = ({ children }) => {
     setSuccessDivFunction("Thank you for letting us know.");
   };
 
-  // deleteAdd
+  // deleteAdd -----------------------------------------------------------------------------------------------------------------
   const deleteAdd = (e, id) => {
     setUsers(
       users.map((user) => {

@@ -87,11 +87,6 @@ const Offers = () => {
   let numberOfAdds =
     displayedAdds.length !== 0 ? displayedAdds.length : allAdds.length;
 
-  //sortResults
-  const sortResults = (e) => {
-    sortFromContext(e);
-  };
-
   // displayAddsAsTable
   const displayAddsAsTable = () => {
     setHowToDisplay("table");
@@ -329,7 +324,7 @@ const Offers = () => {
                 name="sort"
                 id="sort"
                 className="bg-transparent p-1 border border-neutral-500 rounded-tl rounded-tr outline-0"
-                onChange={(e) => sortResults(e)}
+                onChange={sortFromContext}
               >
                 <option value="No-Sort">No Sort</option>
                 <option value="Newest-Oldest">Newest-Oldest</option>
