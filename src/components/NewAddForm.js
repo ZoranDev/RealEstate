@@ -7,6 +7,27 @@ import { useNavigate } from "react-router-dom";
 import UploadedImage from "./UploadedImage";
 import Error from "./Error";
 
+const cities = [
+  "Podgorica",
+  "Niksic",
+  "Berane",
+  "Andrijevica",
+  "Budva",
+  "Cetinje",
+  "Herceg-Novi",
+  "Bar",
+  "Bijelo-Polje",
+  "Danilovgrad",
+  "Kolasin",
+  "Kotor",
+  "Mojkovac",
+  "Plav",
+  "Pljevlja",
+  "Pluzine",
+  "Savnik",
+  "Rozaje",
+];
+
 const NewAddForm = () => {
   // Context stuff
   const { appendNewAddToActiveUser, closeNewAddForm } =
@@ -76,7 +97,7 @@ const NewAddForm = () => {
     }
   };
 
-  // deleteImage
+  // deleteImage - ODJE TREBA OSTATI OVO e ZA SAD
   const deleteImage = (e, urlToDelete) => {
     setFilesUrls(
       filesUrls.filter((url) => {
@@ -194,7 +215,7 @@ const NewAddForm = () => {
                 id="addType"
                 className="w-87 h-8 bg-transparent rounded outline-0 cursor-pointer border border-neutral-500"
                 required={true}
-                onChange={(e) => fillState(e)}
+                onChange={fillState}
               >
                 <option></option>
                 <option value="Sell">Sell</option>
@@ -217,7 +238,7 @@ const NewAddForm = () => {
                 id="propertyType"
                 className="w-87 h-8 bg-transparent rounded outline-0 cursor-pointer border border-neutral-500"
                 required={true}
-                onChange={(e) => fillState(e)}
+                onChange={fillState}
               >
                 <option></option>
                 <option value="Condo">Condo</option>
@@ -238,7 +259,7 @@ const NewAddForm = () => {
             </div>
             <div className="flex justify-between w-full text-neutral-800">
               <textarea
-                onChange={(e) => fillState(e)}
+                onChange={fillState}
                 name="propertyDescription"
                 id="propertyDescription"
                 className="w-full h-24 text-neutral-800 rounded p-2.5 outline-0 resize-none border border-neutral-500"
@@ -258,7 +279,7 @@ const NewAddForm = () => {
                 id="country"
                 className="w-87 h-8 bg-transparent rounded outline-0 cursor-pointer border border-neutral-500"
                 required={true}
-                onChange={(e) => fillState(e)}
+                onChange={fillState}
               >
                 <option></option>
                 <option value="Montenegro">Montenegro</option>
@@ -280,27 +301,14 @@ const NewAddForm = () => {
                 id="city"
                 className="w-87 h-8 bg-transparent rounded outline-0 cursor-pointer border border-neutral-500"
                 required={true}
-                onChange={(e) => fillState(e)}
+                onChange={fillState}
               >
                 <option></option>
-                <option value="Podgorica">Podgorica</option>
-                <option value="Berane">Berane</option>
-                <option value="Andrijevica">Andrijevica</option>
-                <option value="Budva">Budva</option>
-                <option value="Cetinje">Cetinje</option>
-                <option value="Herceg-Novi">Herceg Novi</option>
-                <option value="Bar">Bar</option>
-                <option value="Bijelo-Polje">Bijelo Polje</option>
-                <option value="Danilovgrad">Danilovgrad</option>
-                <option value="Kolasin">Kolasin</option>
-                <option value="Kotor">Kotor</option>
-                <option value="Mojkovac">Mojkovac</option>
-                <option value="Niksic">Niksic</option>
-                <option value="Plav">Plav</option>
-                <option value="Pljevlja">Pljevlja</option>
-                <option value="Pluzine">Pluzine</option>
-                <option value="Savnik">Savnik</option>
-                <option value="Rozaje">Rozaje</option>
+                {cities.map((city, index) => (
+                  <option key={index} value={city}>
+                    {city}
+                  </option>
+                ))}
               </select>
               <div className="flex justify-center items-center w-10% h-8 bg-neutral-700 text-white text-xl p-2.5 rounded cursoir-pointer">
                 ?
@@ -315,7 +323,7 @@ const NewAddForm = () => {
             </div>
             <div className="flex justify-between w-full text-neutral-800">
               <input
-                onChange={(e) => fillState(e)}
+                onChange={fillState}
                 type="number"
                 className="w-87 h-8 bg-transparent border border-neutral-500 pl-2.5 rounded outline-0 cursor-pointer"
                 id="formPrice"
@@ -336,7 +344,7 @@ const NewAddForm = () => {
             </div>
             <div className="flex justify-between w-full text-neutral-800">
               <input
-                onChange={(e) => fillState(e)}
+                onChange={fillState}
                 type="number"
                 id="square"
                 name="square"
@@ -360,7 +368,7 @@ const NewAddForm = () => {
                 </div>
                 <div className="flex justify-between w-full text-neutral-800">
                   <input
-                    onChange={(e) => fillState(e)}
+                    onChange={fillState}
                     type="text"
                     id="address"
                     name="address"
@@ -376,7 +384,7 @@ const NewAddForm = () => {
                 </div>
                 <div className="flex justify-between w-full text-neutral-800">
                   <input
-                    onChange={(e) => fillState(e)}
+                    onChange={fillState}
                     type="number"
                     id="numOfTerraces"
                     name="numOfTerraces"
@@ -395,7 +403,7 @@ const NewAddForm = () => {
                     name="parking"
                     id="parking"
                     className="w-full h-8 bg-transparent rounded outline-0 cursor-pointer border border-neutral-500"
-                    onChange={(e) => fillState(e)}
+                    onChange={fillState}
                   >
                     <option></option>
                     <option value="Yes">Yes</option>
@@ -410,7 +418,7 @@ const NewAddForm = () => {
                 </div>
                 <div className="flex justify-between w-full text-neutral-800">
                   <input
-                    onChange={(e) => fillState(e)}
+                    onChange={fillState}
                     type="number"
                     id="floor"
                     name="floor"
@@ -428,7 +436,7 @@ const NewAddForm = () => {
                 </div>
                 <div className="flex justify-between w-full text-neutral-800">
                   <input
-                    onChange={(e) => fillState(e)}
+                    onChange={fillState}
                     type="number"
                     id="numOfRooms"
                     name="numOfRooms"
@@ -444,7 +452,7 @@ const NewAddForm = () => {
                 </div>
                 <div className="flex justify-between w-full text-neutral-800">
                   <input
-                    onChange={(e) => fillState(e)}
+                    onChange={fillState}
                     type="number"
                     id="numOfBathrooms"
                     name="numOfBathrooms"
@@ -463,7 +471,7 @@ const NewAddForm = () => {
                     name="aircondition"
                     id="airCondition"
                     className="w-full h-8 bg-transparent rounded outline-0 cursor-pointer border border-neutral-500"
-                    onChange={(e) => fillState(e)}
+                    onChange={fillState}
                   >
                     <option></option>
                     <option value="Yes">Yes</option>
