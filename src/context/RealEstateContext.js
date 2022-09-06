@@ -314,35 +314,26 @@ export const RealEstateProvider = ({ children }) => {
     setDisplayedAdds(arrayToPermut);
   };
 
-  //submitRating- --------------------------------------------------
+  //submitRating
   const submitRating = (id) => {
-    let clickedRating = parseInt(id);
-
     setRating({
       totalRatings: rating.totalRatings + 1,
-      sumOfRatings: rating.sumOfRatings + clickedRating,
+      sumOfRatings: rating.sumOfRatings + parseInt(id),
     });
 
     setSuccessDivFunction("Thank you for letting us know.");
   };
 
-  // deleteAdd -----------------------------------------------------------------------------------------------------------------
-  const deleteAdd = (e, id) => {
+  // deleteAdd function ---------- WHEN CLICK ON QUICK FILTER AGAIN SHOW OUR ALL ADDS
+  const deleteAdd = (id) => {
     setUsers(
       users.map((user) => {
-        if (user.adds) {
-          user.adds.forEach((add) => {
-            if (add.addID === id) {
-              user.adds = user.adds.filter((add) => {
-                return add.addID !== id;
-              });
-            }
-          });
-
-          return user;
-        } else {
-          return user;
-        }
+        user.adds.forEach((add) => {
+          if (add.addID === id) {
+            user.adds = user.adds.filter((add) => add.addID !== id);
+          }
+        });
+        return user;
       })
     );
   };

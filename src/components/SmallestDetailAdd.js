@@ -43,6 +43,11 @@ const SmallestDetailAdd = ({ info, openedInProfile }) => {
     navigate(`/offers/offer/${info.addID}`);
   };
 
+  //onClick for delete add
+  const onClick = () => {
+    deleteAdd(info.addID);
+  };
+
   return (
     <div
       className="w-320 border-b-2 border-green-500 flex flex-col justify-start mb-3 bg-white/70 rounded-xl"
@@ -111,7 +116,7 @@ const SmallestDetailAdd = ({ info, openedInProfile }) => {
       {openedInProfile && (
         <h1
           className="w-44 bg-red-400 text-white text-xl mx-auto my-2 px-3 py-1 text-center rounded cursor-pointer opacity-70 hover:opacity-100"
-          onClick={(e) => deleteAdd(e, info.addID)}
+          onClick={onClick}
         >
           Delete
         </h1>
