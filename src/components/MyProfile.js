@@ -60,6 +60,11 @@ export const MyProfile = () => {
     setAddsToShow(e.target.id);
   };
 
+  //onClick
+  const onClick = () => {
+    saveNewProfileInfo(myProfileInfo, urlProfileImage);
+  };
+
   return (
     <>
       {/* Show error or success */}
@@ -147,9 +152,7 @@ export const MyProfile = () => {
             <div
               className="w-32 md:w-44 text-center flex justify-center items-center bg-transparent mt-5 text-neutral-800 py-2.5 px-7 border border-neutral-800 rounded text-base cursor-pointer
               hover:bg-neutral-800 hover:text-white hover:duration-200 active:scale-95 "
-              onClick={(e) =>
-                saveNewProfileInfo(e, myProfileInfo, urlProfileImage)
-              }
+              onClick={onClick}
             >
               Save changes
             </div>

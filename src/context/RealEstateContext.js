@@ -254,7 +254,7 @@ export const RealEstateProvider = ({ children }) => {
     }
   };
 
-  // saveNewProfileInfo ----------------------------------------------------------------------------------------------------
+  // saveNewProfileInfo
   const saveNewProfileInfo = (e, newInfo, userImageUrl) => {
     // Now go through users and for that user change info
     setUsers(
@@ -264,10 +264,8 @@ export const RealEstateProvider = ({ children }) => {
           user.lastName = newInfo.lastName;
           user.phone = newInfo.phone;
           user.userImageUrl = userImageUrl;
-          return user;
-        } else {
-          return user;
         }
+        return user;
       })
     );
     setSuccessDivFunction("Info successfully updated!!");
@@ -324,7 +322,7 @@ export const RealEstateProvider = ({ children }) => {
     setSuccessDivFunction("Thank you for letting us know.");
   };
 
-  // deleteAdd function ---------- WHEN CLICK ON QUICK FILTER AGAIN SHOW OUR ALL ADDS
+  // deleteAdd function ---------- WHEN CLICK ON QUICK FILTER AGAIN SHOW OUR ALL ADDS, maybe add json server??
   const deleteAdd = (id) => {
     setUsers(
       users.map((user) => {
