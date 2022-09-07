@@ -38,7 +38,7 @@ const DetailAdd = () => {
   // Get add to display info
   const getAddToDisplay = () => {
     allAdds.forEach((add) => {
-      add.addID === params.id && setAddToDisplay(add);
+      add.addID === parseInt(params.id) && setAddToDisplay(add);
     });
   };
 
@@ -47,7 +47,9 @@ const DetailAdd = () => {
     users.forEach((user) => {
       // If user have adds
       user.adds &&
-        user.adds.forEach((add) => add.addID === params.id && setOwner(user));
+        user.adds.forEach(
+          (add) => add.addID === parseInt(params.id) && setOwner(user)
+        );
     });
   };
 

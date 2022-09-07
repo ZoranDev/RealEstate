@@ -65,6 +65,8 @@ const LessDetailAdd = ({ info }) => {
     isFav = activeUserInfo.favorites.includes(info.addID) && true;
   }
 
+  const img1 = `${info.images[0]}`;
+
   return (
     <div
       className="w-full border-b-2 border-green-500 flex flex-col md:flex-row justify-between mb-3 bg-white/80 rounded-xl"

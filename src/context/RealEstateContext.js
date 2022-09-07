@@ -1,28 +1,39 @@
 import { createContext, useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-// Importing images for start app - OVO MOZDA DRUGACIJE NEKAKO VIDJETI
-import Add1Img1 from "../Images/Start/Condo1.jpg";
-import Add1Img2 from "../Images/Start/Condo1Interior.jpg";
-import Add2Img1 from "../Images/Start/House1.jpg";
-import Add2Img2 from "../Images/Start/House2.jpg";
-import Add2Img3 from "../Images/Start/House3.jpg";
-
 const RealEstateContext = createContext();
 
 export const RealEstateProvider = ({ children }) => {
-  // Here we create state - to kasnije trebaju biti konstante a za sad samo admina i jos jednog usera
+  // Here we create state - and with useEffect pull it from json server db.json file
   const [users, setUsers] = useState([]);
 
+  // Load users
   useEffect(() => {
     fetchUsers();
   }, []);
+
+  // Get all adds when users is fetcher - users will change from emty array to full array
+  useEffect(() => {
+    getAllAdds();
+  }, [users]);
 
   //fetch users
   const fetchUsers = async () => {
     const response = await fetch(`http://localhost:5000/users`);
     const data = await response.json();
     setUsers(data);
+  };
+
+  // getAllAdds
+  const getAllAdds = () => {
+    let all = [];
+    users.forEach((user) => {
+      user.adds &&
+        user.adds.forEach((add) => {
+          all.push(add);
+        });
+    });
+    setAllAdds(all);
   };
 
   // State for showLogInForm

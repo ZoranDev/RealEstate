@@ -29,7 +29,10 @@
           "city": "Podgorica",
           "price": 500,
           "square": 50,
-          "images": [],
+          "images": [
+            "/Images/Start/Condo1.jpg",
+            "/Images/Start/Condo1Interior.jpg"
+          ],
           "releaseTime": "Tue May 31 2022",
           "releaseTimeStamp": 1653988980000,
           "addID": 21,
@@ -51,7 +54,11 @@
           "city": "Podgorica",
           "price": 150000,
           "square": 150,
-          "images": [],
+          "images": [
+            "/Images/Start/House1.jpg",
+            "/Images/Start/House2.jpg",
+            "/Images/Start/House3.jpg"
+          ],
           "releaseTime": "Tue May 25 2022",
           "releaseTimeStamp": 1653470580000,
           "addID": 22,
@@ -66,11 +73,6 @@
           }
         }
       ]
-    },
-    {
-      "name": "Ivan",
-      "lastName": "Mitrovic",
-      "id": 3
     }
   ]
 }
