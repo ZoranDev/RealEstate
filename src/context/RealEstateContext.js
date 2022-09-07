@@ -12,77 +12,18 @@ const RealEstateContext = createContext();
 
 export const RealEstateProvider = ({ children }) => {
   // Here we create state - to kasnije trebaju biti konstante a za sad samo admina i jos jednog usera
-  const [users, setUsers] = useState([
-    {
-      name: "admin",
-      lastName: "admin",
-      phone: "111 222 333",
-      userImageUrl: null,
-      email: "admin@admin.com",
-      password: "admin",
-      id: uuidv4(),
-      favorites: [],
-      adds: [],
-    },
-    {
-      name: "Zoran",
-      lastName: "Pavicevic",
-      phone: "068888380",
-      userImageUrl: null,
-      email: "zoran@gmail.com",
-      password: "z",
-      id: uuidv4(),
-      favorites: [],
-      adds: [
-        {
-          addType: "Rent",
-          propertyType: "Condo",
-          description:
-            "For sale condo 50 m2 in a quiet part of the capital. The apartment is furnished and has one room.",
-          country: "Montenegro",
-          city: "Podgorica",
-          price: 500,
-          square: 50,
-          images: [Add1Img1, Add1Img2],
-          releaseTime: "Tue May 31 2022",
-          releaseTimeStamp: 1653988980000,
-          addID: uuidv4(),
-          additionalInfo: {
-            address: "Dalmatinska br 65",
-            numOfRooms: 1,
-            numOfBathrooms: 1,
-            numOfTerraces: 1,
-            parking: "Yes",
-            airCondition: "Yes",
-            floor: 3,
-          },
-        },
-        {
-          addType: "Sell",
-          propertyType: "House",
-          description:
-            "For sale house 150 m2 on periphery of the capital. The house is furnished and has five room.",
-          country: "Montenegro",
-          city: "Podgorica",
-          price: 150000,
-          square: 150,
-          images: [Add2Img2, Add2Img1, Add2Img3],
-          releaseTime: "Tue May 25 2022",
-          releaseTimeStamp: 1653470580000,
-          addID: uuidv4(),
-          additionalInfo: {
-            address: "Konik bb",
-            numOfRooms: 5,
-            numOfBathrooms: 2,
-            numOfTerraces: 3,
-            parking: "Yes",
-            airCondition: "Yes",
-            floor: 1,
-          },
-        },
-      ],
-    },
-  ]);
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  //fetch users
+  const fetchUsers = async () => {
+    const response = await fetch(`http://localhost:5000/users`);
+    const data = await response.json();
+    setUsers(data);
+  };
 
   // State for showLogInForm
   const [showLogInForm, setShowLogInForm] = useState(false);
