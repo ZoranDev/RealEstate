@@ -15,7 +15,7 @@
       "name": "Zoran",
       "lastName": "Pavicevic",
       "phone": "068888380",
-      "userImageUrl": null,
+      "userImageUrl": "/static/media/UserImage.d0b8fde88b40189aa6bd.png",
       "email": "zoran@gmail.com",
       "password": "z",
       "id": 2,
@@ -73,6 +73,17 @@
           }
         }
       ]
+    },
+    {
+      "email": "zpavicevic@rocketmial.com",
+      "password": "z",
+      "name": "zzzz",
+      "lastName": "z",
+      "phone": "z",
+      "favorites": [],
+      "adds": [],
+      "id": 3,
+      "userImageUrl": "/static/media/UserImage.d0b8fde88b40189aa6bd.png"
     }
   ]
 }

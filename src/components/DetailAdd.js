@@ -96,7 +96,7 @@ const DetailAdd = () => {
         <div className="w-90 h-4/5 bg-white/70 text-neutral-800 mx-auto my-10 p-5 flex flex-col lg:flex-row lg:justify-between lg:items-baseline relative overflow-y-scroll scrollbar scrollbar-thumb-neutral-800 scrollbar-track-neutral-100 lg:overflow-hidden">
           {/* Close button */}
           <h1
-            className="w-8 h-8 border-red-500 border text-red-500 rounded-full absolute top-2.5 right-2.5 flex justify-center items-center cursor-pointer active:scale-90"
+            className="w-7 h-6 bg-neutral-700 text-white font-bold rounded absolute top-2.5 right-2.5 flex justify-center items-center cursor-pointer active:scale-90 hover:bg-neutral-800"
             onClick={() => navigate("/offers")}
           >
             X

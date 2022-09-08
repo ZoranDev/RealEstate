@@ -10,7 +10,7 @@ export const RealEstateProvider = ({ children }) => {
   // Load users
   useEffect(() => {
     fetchUsers();
-  }, []);
+  }, [users]);
 
   // Get all adds when users is fetcher - users will change from emty array to full array
   useEffect(() => {
@@ -87,16 +87,26 @@ export const RealEstateProvider = ({ children }) => {
   };
 
   // createNewUser
-  const createNewUser = (registerInputs) => {
-    // Create new user based on userInputs(mail,name,password,phone,lastname) and it's id and favorites prop
+  const createNewUser = async (registerInputs) => {
+    // Create new user based on userInputs(mail,name,password,phone,lastname) and it's favorites prop, id will be added automatically via json server
     const newUser = registerInputs;
-    newUser.id = uuidv4();
     newUser.favorites = [];
     newUser.adds = [];
+
+    const response = await fetch("http://localhost:5000/users/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newUser),
+    });
+
+    const data = await response.json();
+
     // Set users state with that new user
-    setUsers([...users, newUser]);
+    setUsers([...users, data]);
     // Then set that user as active user
-    setActiveUser(newUser);
+    setActiveUser(data);
     showLogIn();
     // Message that new user profile is created
     setSuccessDivFunction("New profile created successfully!");
@@ -206,20 +216,40 @@ export const RealEstateProvider = ({ children }) => {
     }
   };
 
-  // saveNewProfileInfo
-  const saveNewProfileInfo = (e, newInfo, userImageUrl) => {
-    // Now go through users and for that user change info
+  // saveNewProfileInfo - SAD ODJE OSTALO DA SE OVA SLIKA PRETVORI U STRING I ONDA DA SE UBACA U SRC
+  const saveNewProfileInfo = async (newInfo, userImageUrl) => {
+    let updUser;
+    users.forEach((user) => {
+      if (user.id === newInfo.id) {
+        user.name = newInfo.name;
+        user.lastName = newInfo.lastName;
+        user.phone = newInfo.phone;
+        user.userImageUrl = userImageUrl;
+      }
+      updUser = user;
+    });
+
+    const response = await fetch(`http://localhost:5000/users/${newInfo.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updUser),
+    });
+
+    const data = await response.json();
+
+    setActiveUser(data);
+
     setUsers(
       users.map((user) => {
         if (user.id === newInfo.id) {
-          user.name = newInfo.name;
-          user.lastName = newInfo.lastName;
-          user.phone = newInfo.phone;
-          user.userImageUrl = userImageUrl;
+          user = data;
         }
         return user;
       })
     );
+
     setSuccessDivFunction("Info successfully updated!!");
   };
 
