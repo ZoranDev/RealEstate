@@ -133,15 +133,33 @@ export const RealEstateProvider = ({ children }) => {
   };
 
   //appendNewAddToActiveUser
-  const appendNewAddToActiveUser = (newAdd) => {
+  const appendNewAddToActiveUser = async (newAdd) => {
+    // Get to the new add some new params
     newAdd.releaseTime = new Date().toString().slice(0, 15);
     newAdd.releaseTimeStamp = new Date().getTime();
     newAdd.addID = uuidv4();
+    // Get current user
+    const currentUser = activeUserInfo;
+    currentUser.adds.push(newAdd);
+
+    const response = await fetch(
+      `http://localhost:5000/users/${activeUserInfo.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(currentUser),
+      }
+    );
+
+    const data = await response.json();
+
     // Append that add to adds array of active user
     setUsers(
       users.map((user) => {
         if (user.id === activeUserInfo.id) {
-          user.adds.push(newAdd);
+          user = data;
         }
         return user;
       })
