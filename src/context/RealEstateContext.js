@@ -205,6 +205,7 @@ export const RealEstateProvider = ({ children }) => {
     );
   };
 
+  //OVO POSLE ISTO PREBACITI U JSON SERVER DA BI OSTALI UPAMCENI FAV OGLASI
   // addToFavorite ---------------------------------------------------------------------------------------------------------------
   const addToFavorite = (favoriteId) => {
     // If someone is logged in, otherwise this can't be clicked
@@ -322,15 +323,29 @@ export const RealEstateProvider = ({ children }) => {
     setSuccessDivFunction("Thank you for letting us know.");
   };
 
-  // deleteAdd function ---------- WHEN CLICK ON QUICK FILTER AGAIN SHOW OUR ALL ADDS, maybe add json server??
-  const deleteAdd = (id) => {
+  // deleteAdd function
+  const deleteAdd = async (id) => {
+    // Need to update full user - mozda pogledati ovo posle jer ne brisem usera nego ga update-ujem bez ovog oglasa
+    let currentUser = activeUserInfo;
+    currentUser.adds = currentUser.adds.filter((add) => add.addID !== id);
+
+    const response = await fetch(
+      `http://localhost:5000/users/${activeUserInfo.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(currentUser),
+      }
+    );
+    const data = await response.json();
+
     setUsers(
       users.map((user) => {
-        user.adds.forEach((add) => {
-          if (add.addID === id) {
-            user.adds = user.adds.filter((add) => add.addID !== id);
-          }
-        });
+        if (user.id === activeUserInfo.id) {
+          user = data;
+        }
         return user;
       })
     );

@@ -71,31 +71,6 @@
             "airCondition": "Yes",
             "floor": 1
           }
-        },
-        {
-          "addType": "Rent",
-          "propertyType": "Condo",
-          "description": "",
-          "country": "Montenegro",
-          "city": "Pljevlja",
-          "price": "1",
-          "square": "1",
-          "images": [
-            "blob:http://localhost:3000/425be179-d2b0-4afd-aad7-a0003f51cfc5"
-          ],
-          "additionalInfo": {
-            "address": "",
-            "numOfRooms": null,
-            "numOfBathrooms": null,
-            "numOfTerraces": null,
-            "parking": "",
-            "airCondition": "",
-            "floor": null
-          },
-          "propertyDescription": "z",
-          "releaseTime": "Thu Sep 08 2022",
-          "releaseTimeStamp": 1662624340614,
-          "addID": "a2e5d64d-4bfa-4c79-b1f3-4ab8cf8fb215"
         }
       ]
     }
