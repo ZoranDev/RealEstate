@@ -77,7 +77,7 @@ const NewAddForm = () => {
   const navigate = useNavigate();
 
   //handleUpload
-  const handleUpload = (e) => {
+  const handleUpload = async (e) => {
     let files = e.target.files;
     // Check to see how much pictures are uploading
     if (files.length > 6) {
@@ -90,11 +90,27 @@ const NewAddForm = () => {
       let urls = [];
 
       for (let i = 0; i < files.length; i++) {
-        urls.push(URL.createObjectURL(files[i]));
+        const b64 = await convertBase64(files[i]);
+        urls.push(b64);
       }
 
       setFilesUrls(urls);
     }
+  };
+
+  const convertBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      };
+
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
   };
 
   // deleteImage - ODJE TREBA OSTATI OVO e ZA SAD
@@ -175,8 +191,8 @@ const NewAddForm = () => {
         Advertise the property
       </h1>
       <h1
-        className="flex justify-center items-center absolute top-2.5 right-2.5 w-8 h-8 bg-transparent text-neutral-800 border-2 border-neutral-800 rounded-full cursor-pointer active:scale-90 hover:text-red-400 hover:border-red-400"
-        onClick={(e) => closeNewAddForm(e)}
+        className="w-7 h-6 bg-neutral-700 text-white font-bold rounded absolute top-2.5 right-2.5 flex justify-center items-center cursor-pointer active:scale-90 hover:bg-neutral-800"
+        onClick={closeNewAddForm}
       >
         X
       </h1>

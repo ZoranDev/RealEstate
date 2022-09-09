@@ -125,7 +125,7 @@ const Navbar = () => {
 
           {/* Show panel for profile and logout */}
           {showUserPanel && (
-            <div className="w-32 bg-neutral-800 text-white p-2.5 rounded absolute right-0 -bottom-20 z-10 sm:w-44 ">
+            <div className="w-32 bg-neutral-800 text-white p-2.5 rounded absolute right-0 -bottom-20 z-20 sm:w-44 ">
               <Link
                 className="text-white"
                 to="/myProfile"

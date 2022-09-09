@@ -1,5 +1,5 @@
 // Main stuff
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import RealEstateContext from "../context/RealEstateContext";
 import { Link } from "react-router-dom";
 
@@ -25,6 +25,15 @@ export const MyProfile = () => {
   // State for my-profile info
   const [myProfileInfo, setMyProfileInfo] = useState(activeUserInfo);
 
+  // State for uploaded picture
+  const [uploadedPicture, setUploadedPicture] = useState(null);
+
+  useEffect(() => {
+    if (activeUserInfo.userImageUrl !== "") {
+      setUploadedPicture(activeUserInfo.userImageUrl);
+    }
+  }, []);
+
   //updateMyProfileInfo - on save changes btn we need to save that in context
   const updateMyProfileInfo = (e) => {
     setMyProfileInfo({
@@ -42,18 +51,27 @@ export const MyProfile = () => {
     });
   };
 
-  // state for url image
-  const [urlProfileImage, setUrlProfileImage] = useState(null);
-
   // upload profile picture
-  const uploadProfilePicture = (e) => {
-    setUrlProfileImage(URL.createObjectURL(e.target.files[0]));
+  const uploadProfilePicture = async (e) => {
+    let b64img = await convertBase64(e.target.files[0]);
+    setUploadedPicture(b64img);
   };
 
-  // If user do not have profile picture set this as default
-  if (!urlProfileImage) {
-    setUrlProfileImage(DefaultUrlPicture);
-  }
+  // get base64 for uploaded image
+  const convertBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const filereader = new FileReader();
+      filereader.readAsDataURL(file);
+
+      filereader.onload = () => {
+        resolve(filereader.result);
+      };
+
+      filereader.onerror = (error) => {
+        reject(error);
+      };
+    });
+  };
 
   // handleClick
   const handleClick = (e) => {
@@ -62,7 +80,7 @@ export const MyProfile = () => {
 
   //onClick
   const onClick = () => {
-    saveNewProfileInfo(myProfileInfo, urlProfileImage);
+    saveNewProfileInfo(myProfileInfo, uploadedPicture);
   };
 
   return (
@@ -84,7 +102,7 @@ export const MyProfile = () => {
         <Link
           to="/"
           children={<h1>X</h1>}
-          className="w-5 h-5 absolute top-2 right-2 border border-red-500 text-red-500 rounded-full opacity-70 hover:opacity-100 cursor-pointer flex justify-center items-center"
+          className="w-7 h-6 bg-neutral-700 text-white font-bold rounded absolute top-2.5 right-2.5 flex justify-center items-center cursor-pointer active:scale-90 hover:bg-neutral-800"
         />
 
         <div className="w-full h-full md:overflow-hidden flex flex-col md:flex-row justify-between items-center overflow-y-scroll scrollbar scrollbar-thumb-neutral-800 scrollbar-track-neutral-100 ">
@@ -99,7 +117,7 @@ export const MyProfile = () => {
                 >
                   + Upload
                   <input
-                    onChange={(e) => uploadProfilePicture(e)}
+                    onChange={uploadProfilePicture}
                     type="file"
                     name="profile-image"
                     id="profile-image"
@@ -113,9 +131,9 @@ export const MyProfile = () => {
               <div className="mt-2 w-24 h-24 rounded-full">
                 <img
                   src={
-                    activeUserInfo.userImageUrl
-                      ? activeUserInfo.userImageUrl
-                      : urlProfileImage && urlProfileImage
+                    activeUserInfo.userImageUrl === "" && !uploadedPicture
+                      ? DefaultUrlPicture
+                      : uploadedPicture
                   }
                   alt="Profile"
                   className="w-full h-full rounded-full"
