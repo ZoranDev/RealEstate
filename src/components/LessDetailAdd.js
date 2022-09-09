@@ -22,7 +22,6 @@ const LessDetailAdd = ({ info }) => {
 
   useEffect(() => {
     getUserNameAndImage();
-    console.log("Displayed adds");
   }, []);
 
   /* useEffect(() => {
