@@ -13,7 +13,8 @@ import UserImage from "../Images/UserImage.png";
 // Same as lessDetailsAdd just remove some stuff and display
 const SmallestDetailAdd = ({ info, openedInProfile }) => {
   // Context stuff
-  const { users, addToFavorite, deleteAdd } = useContext(RealEstateContext);
+  const { users, addToFavorite, deleteAdd, activeUserInfo } =
+    useContext(RealEstateContext);
 
   const navigate = useNavigate();
 
@@ -48,6 +49,17 @@ const SmallestDetailAdd = ({ info, openedInProfile }) => {
     deleteAdd(info.addID);
   };
 
+  //add to fav
+  const addToFav = () => {
+    addToFavorite(info.addID);
+  };
+
+  let isFav = false;
+
+  if (activeUserInfo && activeUserInfo.favorites.length !== 0) {
+    isFav = activeUserInfo.favorites.includes(info.addID) && true;
+  }
+
   return (
     <div
       className="w-320 border-b-2 border-green-500 flex flex-col justify-start mb-3 bg-white/70 rounded-xl"
@@ -60,8 +72,12 @@ const SmallestDetailAdd = ({ info, openedInProfile }) => {
           <p className="ml-2">{info.images.length}</p>
         </div>
         <FaHeart
-          className="w-8 h-8 cursor-pointer absolute top-2 right-2 z-10 text-white hover:text-green-500 duration-300" /*  VIDJETI DA LI OVO PRAVITI  */
-          onClick={(e) => addToFavorite(e, info.addID)}
+          className={
+            isFav
+              ? "w-8 h-8 cursor-pointer absolute top-2 right-2 z-10 text-green-500"
+              : "w-8 h-8 cursor-pointer absolute top-2 right-2 z-10 text-white hover:text-green-500 duration-300"
+          }
+          onClick={addToFav}
         />
 
         <img
