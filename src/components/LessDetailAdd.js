@@ -17,16 +17,9 @@ const LessDetailAdd = ({ info }) => {
   const [userName, setUserName] = useState(null);
   const [userImage, setUserImage] = useState(null);
 
-  //state for isFav add
-  /* const [isFav, setIsFav] = useState(false); */
-
   useEffect(() => {
     getUserNameAndImage();
   }, []);
-
-  /* useEffect(() => {
-    checkIsFav();
-  }, [users]); */ // ne radi dobro za remove from this list
 
   //getUserNameAndImage function
   const getUserNameAndImage = () => {
@@ -41,15 +34,6 @@ const LessDetailAdd = ({ info }) => {
       }
     });
   };
-
-  //check is fav function
-  /* const checkIsFav = () => { */
-  // Check to see if user logged in
-  // Check to see if add is favorite for active user, if it is make it green otherwise make it default
-  /*     if (activeUserInfo && activeUserInfo.favorites.length !== 0) {
-      activeUserInfo.favorites.includes(info.addID) && setIsFav(true);
-    }
-  }; */
 
   // This is used for onClick function below
   const navigate = useNavigate();
