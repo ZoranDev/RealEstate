@@ -205,29 +205,45 @@ export const RealEstateProvider = ({ children }) => {
     );
   };
 
-  //OVO POSLE ISTO PREBACITI U JSON SERVER DA BI OSTALI UPAMCENI FAV OGLASI
-  // addToFavorite ---------------------------------------------------------------------------------------------------------------
-  const addToFavorite = (favoriteId) => {
-    // If someone is logged in, otherwise this can't be clicked
+  // addToFavorite
+  const addToFavorite = async (favoriteId) => {
+    // Check to see if someone is logged
     if (activeUserInfo) {
-      // Check to see if selected add is alredy in favorite, if yes remove it if no add it to favorite
+      let updUser = activeUserInfo;
+
+      users.forEach((user) => {
+        if (user.id === activeUserInfo.id) {
+          if (!user.favorites.includes(favoriteId)) {
+            updUser.favorites.push(favoriteId);
+            setSuccessDivFunction("Added to your favorite list.");
+          } else {
+            updUser.favorites = updUser.favorites.filter(
+              (addID) => addID !== favoriteId
+            );
+            setSuccessDivFunction("Removed from your favorite list.");
+          }
+        }
+      });
+
+      const response = await fetch(
+        `http://localhost:5000/users/${activeUserInfo.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updUser),
+        }
+      );
+
+      const data = await response.json();
+
       setUsers(
         users.map((user) => {
           if (user.id === activeUserInfo.id) {
-            // Check to see if favorite id is alredy there
-            if (!user.favorites.includes(favoriteId)) {
-              user.favorites.push(favoriteId);
-              setSuccessDivFunction("Added to your favorite list.");
-            } else {
-              user.favorites = user.favorites.filter((favoriteAddId) => {
-                return favoriteAddId !== favoriteId;
-              });
-              setSuccessDivFunction("Removed from your favorite list.");
-            }
-            return user;
-          } else {
-            return user;
+            user = data;
           }
+          return user;
         })
       );
     } else {
@@ -235,7 +251,7 @@ export const RealEstateProvider = ({ children }) => {
     }
   };
 
-  // saveNewProfileInfo - SAD ODJE OSTALO DA SE OVA SLIKA PRETVORI U STRING I ONDA DA SE UBACA U SRC
+  // saveNewProfileInfo
   const saveNewProfileInfo = async (newInfo, userImageUrl) => {
     let updUser;
     users.forEach((user) => {

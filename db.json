@@ -19,7 +19,10 @@
       "email": "zoran@gmail.com",
       "password": "z",
       "id": 2,
-      "favorites": [],
+      "favorites": [
+        "1213dsaa35-9c10-4c52-b396-4406857d7c94",
+        "8009fsa35-9c10-4c52-b396-4406857d7c94"
+      ],
       "adds": [
         {
           "addType": "Rent",
